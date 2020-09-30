@@ -1,0 +1,21 @@
+{
+	"name": "sy/mail",
+	"description": "Simple mail library",
+	"type": "library",
+	"require": {
+		"php": ">=5.5.0",
+		"phpmailer/phpmailer": "^6.1"
+	},
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Syone",
+			"email": "syone7@gmail.com"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"Sy\\": "src/"
+		}
+	}
+}
