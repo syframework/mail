@@ -1,0 +1,2 @@
+# mail
+Simple mail library
