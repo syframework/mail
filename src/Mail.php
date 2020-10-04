@@ -19,6 +19,11 @@ class Mail {
 	private $body;
 	private $text;
 
+	/**
+	 * @param string $to
+	 * @param string $subject
+	 * @param mixed $message String or Object with __toString method
+	 */
 	public function __construct($to = '', $subject = '', $message = '') {
 		$this->mailer = new PHPMailer(true);
 		$this->mailer->CharSet = 'utf-8';
@@ -28,7 +33,7 @@ class Mail {
 		$this->from    = '';
 		$this->replyTo = '';
 		$this->subject = $subject;
-		$this->body    = $message;
+		$this->body    = method_exists($message, '__toString') ? $message->__toString() : $message;
 		$this->text    = '';
 		$this->cc      = '';
 		$this->bcc     = '';
@@ -91,12 +96,18 @@ class Mail {
 		$this->subject = $subject;
 	}
 
+	/**
+	 * @param mixed $body String or Object with __toString method
+	 */
 	public function setBody($body) {
-		$this->body = $body;
+		$this->body = method_exists($body, '__toString') ? $body->__toString() : $body;
 	}
 
+	/**
+	 * @param mixed $body String or Object with __toString method
+	 */
 	public function addBody($body) {
-		$this->body .= $body;
+		$this->body .= method_exists($body, '__toString') ? $body->__toString() : $body;
 	}
 
 	public function addText($text) {
@@ -135,7 +146,16 @@ class Mail {
 
 			$this->mailer->Subject = $this->subject;
 			$this->mailer->Body    = $this->body;
-			$this->mailer->AltBody = empty($this->text) ? strip_tags(html_entity_decode($this->body, ENT_QUOTES, 'UTF-8')) : $this->text;
+
+			// Auto plain text if not set
+			$text = $this->text;
+			if (empty($text)) {
+				$text = implode("\n", array_map('trim', array_filter(
+					explode("\n", strip_tags(html_entity_decode(preg_replace('/<head>.*<\/?head>/ms', '', $this->body), ENT_QUOTES, 'UTF-8'))),
+					'trim'
+				)));
+			}
+			$this->mailer->AltBody = $text;
 
 			$this->mailer->send();
 		} catch(\PHPMailer\PHPMailer\Exception $e) {
