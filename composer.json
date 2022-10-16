@@ -5,7 +5,7 @@
 	"require": {
 		"php": ">=5.6.0",
 		"phpmailer/phpmailer": "^6.1",
-		"sy/webcomponent": "^1.0"
+		"sy/webcomponent": "^2"
 	},
 	"license": "MIT",
 	"authors": [
