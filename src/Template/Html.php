@@ -5,6 +5,9 @@ use Sy\Component\WebComponent;
 
 class Html extends WebComponent {
 
+	/**
+	 * @var string
+	 */
 	private $body;
 
 	/**
@@ -14,11 +17,9 @@ class Html extends WebComponent {
 		parent::__construct();
 		$this->setTemplateFile(__DIR__ . '/Html.html');
 		$this->body = method_exists($message, '__toString') ? $message->__toString() : "<p>$message</p>";
-	}
-
-	public function __toString() {
-		$this->setVar('BODY', $this->body);
-		return parent::__toString();
+		$this->mount(function() {
+			$this->setVar('BODY', $this->body);
+		});
 	}
 
 	/**
