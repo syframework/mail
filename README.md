@@ -7,7 +7,7 @@ Simple mail library
 Install the latest version with
 
 ```bash
-$ composer require sy/mail
+composer require sy/mail
 ```
 
 ## Basic Usage

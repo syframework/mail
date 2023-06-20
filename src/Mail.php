@@ -10,13 +10,44 @@ class Mail {
 	 */
 	private $mailer;
 
+	/**
+	 * @var string
+	 */
 	private $to;
+
+	/**
+	 * @var string
+	 */
 	private $from;
+
+	/**
+	 * @var string
+	 */
 	private $replyTo;
+
+	/**
+	 * @var string
+	 */
 	private $cc;
+
+	/**
+	 * @var string
+	 */
 	private $bcc;
+
+	/**
+	 * @var string
+	 */
 	private $subject;
+
+	/**
+	 * @var string
+	 */
 	private $body;
+
+	/**
+	 * @var string
+	 */
 	private $text;
 
 	/**
@@ -39,6 +70,15 @@ class Mail {
 		$this->bcc     = '';
 	}
 
+	/**
+	 * SMTP configuration
+	 *
+	 * @param string $host
+	 * @param string $username
+	 * @param string $password
+	 * @param string $encryption
+	 * @param integer $port
+	 */
 	public function setSmtp($host, $username, $password, $encryption = 'ssl', $port = 465) {
 		$this->mailer->isSMTP();
 		$this->mailer->Host       = $host;
@@ -52,46 +92,73 @@ class Mail {
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getTo() {
 		return $this->to;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getFrom() {
 		return $this->from;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getSubject() {
 		return $this->subject;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getBody() {
 		return $this->body;
 	}
 
+	/**
+	 * @param string $to
+	 */
 	public function setTo($to) {
 		$this->to = $to;
 	}
 
 	/**
-	 * @param string $from foo@bar.com or Foo <foo@bar.com> 
+	 * @param string $from foo@bar.com or Foo <foo@bar.com>
 	 * @param string $name
 	 */
 	public function setFrom($from, $name = '') {
 		$this->from = empty($name) ? $from : "$name <$from>";
 	}
 
+	/**
+	 * @param string $replyTo
+	 */
 	public function setReplyTo($replyTo) {
 		$this->replyTo = $replyTo;
 	}
 
+	/**
+	 * @param string $cc
+	 */
 	public function setCc($cc) {
 		$this->cc = $cc;
 	}
 
+	/**
+	 * @param string $bcc
+	 */
 	public function setBcc($bcc) {
 		$this->bcc = $bcc;
 	}
 
+	/**
+	 * @param string $subject
+	 */
 	public function setSubject($subject) {
 		$this->subject = $subject;
 	}
@@ -110,10 +177,17 @@ class Mail {
 		$this->body .= method_exists($body, '__toString') ? $body->__toString() : $body;
 	}
 
+	/**
+	 * @param string $text
+	 */
 	public function addText($text) {
 		$this->text .= $text;
 	}
 
+	/**
+	 * @param string $path
+	 * @param string $name
+	 */
 	public function addAttachment($path, $name = '') {
 		$this->mailer->addAttachment($path, $name);
 	}
@@ -158,8 +232,8 @@ class Mail {
 			$this->mailer->AltBody = $text;
 
 			$this->mailer->send();
-		} catch(\PHPMailer\PHPMailer\Exception $e) {
-			throw new Mail\Exception($e->getMessage());
+		} catch (\PHPMailer\PHPMailer\Exception $e) {
+			throw new Mail\Exception($e->getMessage(), 0, $e);
 		}
 	}
 
